@@ -1,0 +1,674 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>For You ♡</title>
+
+  <!-- Google Fonts Aesthetic -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500;1,600&family=Dancing+Script:wght@600;700&family=Quicksand:wght@400;500;600&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --bg-1: #1b0e19;
+      --bg-2: #2e1528;
+      --bg-3: #140a12;
+      --pink-soft: #ffc2d4;
+      --pink-glow: #ff7aa2;
+      --cream: #fff5f8;
+      --glass: rgba(255, 255, 255, 0.08);
+      --glass-border: rgba(255, 194, 212, 0.28);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: radial-gradient(circle at top left, #3b1933 0%, var(--bg-1) 45%, var(--bg-3) 100%);
+      font-family: 'Quicksand', sans-serif;
+      color: var(--cream);
+      overflow: hidden;
+      position: relative;
+      padding: 20px;
+    }
+
+    /* Cahaya Glow Background */
+    .ambient-orb {
+      position: fixed;
+      border-radius: 50%;
+      filter: blur(90px);
+      opacity: 0.45;
+      pointer-events: none;
+      z-index: 0;
+      animation: floatOrb 10s ease-in-out infinite alternate;
+    }
+
+    .orb-1 {
+      width: 320px;
+      height: 320px;
+      background: #ff6b9d;
+      top: -80px;
+      left: -60px;
+    }
+
+    .orb-2 {
+      width: 280px;
+      height: 280px;
+      background: #b565a7;
+      bottom: -70px;
+      right: -50px;
+      animation-delay: -5s;
+    }
+
+    @keyframes floatOrb {
+      0% { transform: translate(0, 0) scale(1); }
+      100% { transform: translate(25px, 30px) scale(1.15); }
+    }
+
+    /* Container Hiasan Love Melayang */
+    .hearts-container {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      overflow: hidden;
+      z-index: 1;
+    }
+
+    .floating-heart {
+      position: absolute;
+      bottom: -60px;
+      opacity: 0;
+      animation: floatUp linear infinite;
+      filter: drop-shadow(0 0 8px rgba(255, 122, 162, 0.45));
+    }
+
+    @keyframes floatUp {
+      0% {
+        transform: translateY(0) translateX(0) rotate(0deg) scale(0.7);
+        opacity: 0;
+      }
+      15% {
+        opacity: var(--heart-opacity, 0.6);
+      }
+      85% {
+        opacity: var(--heart-opacity, 0.6);
+      }
+      100% {
+        transform: translateY(-110vh) translateX(var(--sway, 30px)) rotate(var(--rot, 25deg)) scale(1.1);
+        opacity: 0;
+      }
+    }
+
+    /* Layar Awal (Tap to Start agar musik bisa autoplay) */
+    .start-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(18, 8, 16, 0.85);
+      backdrop-filter: blur(14px);
+      z-index: 50;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 24px;
+      transition: opacity 0.8s ease, visibility 0.8s ease;
+    }
+
+    .start-overlay.hidden {
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+    }
+
+    .start-heart-icon {
+      width: 64px;
+      height: 64px;
+      color: var(--pink-glow);
+      animation: pulseHeart 1.4s ease-in-out infinite;
+      margin-bottom: 16px;
+      filter: drop-shadow(0 0 18px rgba(255, 122, 162, 0.6));
+    }
+
+    @keyframes pulseHeart {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.16); }
+    }
+
+    .start-title {
+      font-family: 'Dancing Script', cursive;
+      font-size: 2.5rem;
+      color: var(--pink-soft);
+      margin-bottom: 8px;
+    }
+
+    .start-subtitle {
+      font-size: 0.95rem;
+      color: rgba(255, 245, 248, 0.75);
+      margin-bottom: 28px;
+    }
+
+    .start-btn {
+      padding: 13px 34px;
+      border-radius: 999px;
+      border: 1px solid rgba(255, 194, 212, 0.5);
+      background: linear-gradient(135deg, rgba(255, 122, 162, 0.35), rgba(255, 194, 212, 0.18));
+      color: #fff;
+      font-family: 'Quicksand', sans-serif;
+      font-weight: 600;
+      font-size: 1rem;
+      letter-spacing: 0.8px;
+      cursor: pointer;
+      box-shadow: 0 8px 25px rgba(255, 122, 162, 0.25);
+      transition: transform 0.25s ease, box-shadow 0.25s ease;
+    }
+
+    .start-btn:hover {
+      transform: translateY(-2px) scale(1.03);
+      box-shadow: 0 12px 30px rgba(255, 122, 162, 0.45);
+    }
+
+    /* Kartu Utama Aesthetic (Glassmorphism) */
+    .main-card {
+      position: relative;
+      z-index: 10;
+      width: 100%;
+      max-width: 410px;
+      background: var(--glass);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      border: 1px solid var(--glass-border);
+      border-radius: 28px;
+      padding: 26px 22px 28px;
+      box-shadow:
+        0 20px 50px rgba(0, 0, 0, 0.45),
+        inset 0 0 25px rgba(255, 194, 212, 0.06);
+      text-align: center;
+    }
+
+    /* Hiasan Love di Sudut Kartu */
+    .corner-heart {
+      position: absolute;
+      width: 22px;
+      height: 22px;
+      color: var(--pink-soft);
+      opacity: 0.7;
+      animation: gentleSway 3s ease-in-out infinite alternate;
+    }
+    .corner-heart.top-left { top: 14px; left: 16px; }
+    .corner-heart.top-right { top: 14px; right: 16px; animation-delay: -1.5s; }
+
+    @keyframes gentleSway {
+      0% { transform: rotate(-10deg) scale(0.95); }
+      100% { transform: rotate(10deg) scale(1.08); }
+    }
+
+    .header-label {
+      font-family: 'Dancing Script', cursive;
+      font-size: 1.65rem;
+      color: var(--pink-soft);
+      margin-bottom: 14px;
+      letter-spacing: 0.5px;
+      text-shadow: 0 2px 10px rgba(255, 122, 162, 0.35);
+    }
+
+    /* Bingkai Foto Polaroid Aesthetic */
+    .polaroid-wrapper {
+      background: rgba(255, 248, 251, 0.94);
+      padding: 10px 10px 30px;
+      border-radius: 16px;
+      box-shadow: 0 14px 32px rgba(0, 0, 0, 0.38);
+      transform: rotate(-1.2deg);
+      transition: transform 0.5s ease;
+      position: relative;
+      margin: 0 auto 22px;
+    }
+
+    .polaroid-wrapper:hover {
+      transform: rotate(0deg) scale(1.01);
+    }
+
+    .photo-frame {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 4 / 4.3;
+      border-radius: 10px;
+      overflow: hidden;
+      background: #2b1826;
+    }
+
+    .photo-slide {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      opacity: 0;
+      transform: scale(1.08);
+      transition: opacity 0.85s ease-in-out, transform 2.2s ease-out;
+    }
+
+    .photo-slide.active {
+      opacity: 1;
+      transform: scale(1);
+    }
+
+    .polaroid-caption {
+      position: absolute;
+      bottom: 6px;
+      left: 0;
+      right: 0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 14px;
+      color: #6b3b52;
+      font-family: 'Dancing Script', cursive;
+      font-size: 1.05rem;
+    }
+
+    /* Indikator titik 7 foto */
+    .photo-dots {
+      display: flex;
+      gap: 5px;
+      align-items: center;
+    }
+
+    .dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: rgba(107, 59, 82, 0.25);
+      transition: all 0.35s ease;
+    }
+
+    .dot.active {
+      width: 16px;
+      border-radius: 999px;
+      background: #e05780;
+    }
+
+    /* Kotak Lirik Muncul Satu-Satu */
+    .lyrics-box {
+      min-height: 92px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 12px 10px;
+      margin-bottom: 16px;
+      position: relative;
+    }
+
+    .lyric-line {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-size: 1.45rem;
+      font-weight: 600;
+      line-height: 1.42;
+      color: #fff6f9;
+      text-shadow: 0 0 18px rgba(255, 122, 162, 0.55);
+      opacity: 0;
+      transform: translateY(12px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+
+    .lyric-line.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* Divider Love Aesthetic */
+    .love-divider {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      margin-bottom: 14px;
+      opacity: 0.7;
+    }
+
+    .love-divider span.line {
+      height: 1px;
+      width: 55px;
+      background: linear-gradient(90deg, transparent, var(--pink-soft), transparent);
+    }
+
+    /* Kontrol Musik Mini */
+    .music-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 194, 212, 0.2);
+      border-radius: 999px;
+      padding: 8px 14px;
+    }
+
+    .music-info {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 0.82rem;
+      color: var(--pink-soft);
+    }
+
+    .equalizer {
+      display: flex;
+      align-items: flex-end;
+      gap: 3px;
+      height: 14px;
+    }
+
+    .equalizer span {
+      width: 3px;
+      height: 5px;
+      background: var(--pink-glow);
+      border-radius: 3px;
+      transition: height 0.2s ease;
+    }
+
+    .equalizer.playing span {
+      animation: eq 0.8s ease-in-out infinite alternate;
+    }
+    .equalizer.playing span:nth-child(2) { animation-delay: 0.2s; }
+    .equalizer.playing span:nth-child(3) { animation-delay: 0.4s; }
+
+    @keyframes eq {
+      0% { height: 4px; }
+      100% { height: 14px; }
+    }
+
+    .play-toggle {
+      background: rgba(255, 122, 162, 0.25);
+      border: 1px solid rgba(255, 194, 212, 0.35);
+      color: #fff;
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.8rem;
+      transition: background 0.25s ease, transform 0.2s ease;
+    }
+
+    .play-toggle:hover {
+      background: rgba(255, 122, 162, 0.5);
+      transform: scale(1.08);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Cahaya Latar -->
+  <div class="ambient-orb orb-1"></div>
+  <div class="ambient-orb orb-2"></div>
+
+  <!-- Hiasan Love Melayang -->
+  <div class="hearts-container" id="heartsContainer"></div>
+
+  <!-- Layar Awal (Klik untuk Mulai Lagu & Lirik) -->
+  <div class="start-overlay" id="startOverlay">
+    <svg class="start-heart-icon" viewBox="0 0 24 24" fill="currentColor">
+      <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+    </svg>
+    <h1 class="start-title">Special For You</h1>
+    <p class="start-subtitle">Nyalakan suara & ketuk tombol di bawah ♡</p>
+    <button class="start-btn" id="startBtn">Buka Sekarang ✨</button>
+  </div>
+
+  <!-- Kartu Utama -->
+  <main class="main-card">
+    <!-- Hiasan Love Sudut -->
+    <svg class="corner-heart top-left" viewBox="0 0 24 24" fill="currentColor">
+      <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+    </svg>
+    <svg class="corner-heart top-right" viewBox="0 0 24 24" fill="currentColor">
+      <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+    </svg>
+
+    <div class="header-label">My Favorite Moments ♡</div>
+
+    <!-- Bingkai 7 Foto (Berganti tiap 2 detik) -->
+    <div class="polaroid-wrapper">
+      <div class="photo-frame" id="photoFrame">
+        <!-- Foto akan dimasukkan otomatis oleh JavaScript -->
+      </div>
+      <div class="polaroid-caption">
+        <span>Always you ♥</span>
+        <div class="photo-dots" id="photoDots"></div>
+      </div>
+    </div>
+
+    <!-- Area Lirik Muncul Satu-Satu -->
+    <div class="lyrics-box">
+      <p class="lyric-line" id="lyricText">...</p>
+    </div>
+
+    <div class="love-divider">
+      <span class="line"></span>
+      <span style="font-size: 0.8rem; color: var(--pink-soft);">♡ ♥ ♡</span>
+      <span class="line"></span>
+    </div>
+
+    <!-- Pemutar Lagu -->
+    <div class="music-bar">
+      <div class="music-info">
+        <div class="equalizer" id="equalizer">
+          <span></span><span></span><span></span>
+        </div>
+        <span>Baby - Justin Bieber</span>
+      </div>
+      <button class="play-toggle" id="playToggle" title="Play/Pause">⏸</button>
+    </div>
+  </main>
+
+  <!-- Elemen Audio -->
+  <audio id="bgMusic" loop>
+    <!-- GANTI 'lagu.mp3' DENGAN NAMA FILE LAGU KAMU -->
+    <source src="laguu.mp3" type="audio/mpeg" />
+  </audio>
+
+  <script>
+    // =========================================================
+    // 1. MASUKKAN 7 FOTO KAMU DI SINI
+    // Letakkan file foto di folder yang sama dengan file HTML ini
+    // atau ganti dengan link URL foto.
+    // =========================================================
+    const photos = [
+      "foto1.jpg",
+      "foto2.jpg",
+      "foto3.jpg",
+      "foto4.jpg",
+      "foto5.jpg",
+      "foto6.jpg",
+      "foto7.jpg"
+    ];
+
+    // =========================================================
+    // 2. DAFTAR LIRIK & DURASI MUNCUL (dalam milidetik)
+    // 1000 = 1 detik. Bisa disesuaikan agar pas dengan potongan lagumu.
+    // =========================================================
+    const lyrics = [
+      { text: "I'll buy you anything, I'll buy you any ring ", duration: 3500 },
+      { text: "And I'm in pieces, baby, fix me ", duration: 3500 },
+      { text: "And just shake me 'til you wake me from this bad dream ", duration: 3800 },
+      { text: "I'm goin' down, down, down, down ", duration: 3200 },
+      { text: "And I just can't believe my first love won't be around, and I'm like", duration: 3800 },
+      { text: "Baby, baby, baby, oh", duration: 3500 },
+      { text: "Like baby, baby, baby, no", duration: 3500 },
+  
+    ];
+
+    // =========================================================
+    // 3. SETUP SLIDESHOW 7 FOTO (GANTI TIAP 2 DETIK)
+    // =========================================================
+    const photoFrame = document.getElementById("photoFrame");
+    const photoDots = document.getElementById("photoDots");
+    let currentPhotoIndex = 0;
+
+    // Placeholder otomatis jika file foto lokal belum dimasukkan
+    const createFallback = (num) =>
+      `data:image/svg+xml;utf8,` +
+      encodeURIComponent(`
+        <svg xmlns="http://www.w3.org/2000/svg" width="400" height="430">
+          <defs>
+            <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0%" stop-color="#3b1933"/>
+              <stop offset="100%" stop-color="#7a2c59"/>
+            </linearGradient>
+          </defs>
+          <rect width="100%" height="100%" fill="url(#g)"/>
+          <text x="50%" y="48%" fill="#ffc2d4" font-family="sans-serif" font-size="24" text-anchor="middle">♡ Foto ${num} ♡</text>
+          <text x="50%" y="56%" fill="#ffdce6" font-family="sans-serif" font-size="13" text-anchor="middle">Ganti foto${num}.jpg</text>
+        </svg>
+      `);
+
+    photos.forEach((src, index) => {
+      const img = document.createElement("img");
+      img.src = src;
+      img.alt = `Foto ${index + 1}`;
+      img.className = `photo-slide ${index === 0 ? "active" : ""}`;
+      img.onerror = () => {
+        img.src = createFallback(index + 1);
+      };
+      photoFrame.appendChild(img);
+
+      const dot = document.createElement("span");
+      dot.className = `dot ${index === 0 ? "active" : ""}`;
+      photoDots.appendChild(dot);
+    });
+
+    const slides = document.querySelectorAll(".photo-slide");
+    const dots = document.querySelectorAll(".dot");
+
+    function nextPhoto() {
+      slides[currentPhotoIndex].classList.remove("active");
+      dots[currentPhotoIndex].classList.remove("active");
+
+      currentPhotoIndex = (currentPhotoIndex + 1) % slides.length;
+
+      slides[currentPhotoIndex].classList.add("active");
+      dots[currentPhotoIndex].classList.add("active");
+    }
+
+    // Ganti foto setiap 3.5 detik (3500 ms)
+    setInterval(nextPhoto, 3500);
+
+    // =========================================================
+    // 4. LIRIK MUNCUL SATU PER SATU
+    // =========================================================
+    const lyricTextEl = document.getElementById("lyricText");
+    let currentLyricIndex = 0;
+    let lyricTimer = null;
+
+    function showNextLyric() {
+      // Hilangkan dulu dengan fade-out
+      lyricTextEl.classList.remove("show");
+
+      setTimeout(() => {
+        const current = lyrics[currentLyricIndex];
+        lyricTextEl.textContent = current.text;
+        lyricTextEl.classList.add("show");
+
+        currentLyricIndex = (currentLyricIndex + 1) % lyrics.length;
+        lyricTimer = setTimeout(showNextLyric, current.duration);
+      }, 450);
+    }
+
+    // =========================================================
+    // 5. HIASAN LOVE MELAYANG AESTHETIC
+    // =========================================================
+    const heartsContainer = document.getElementById("heartsContainer");
+    const heartColors = ["#ff7aa2", "#ffb3c6", "#ffccd5", "#ffe5ec", "#e05780"];
+
+    function createFloatingHeart() {
+      const heart = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+      heart.setAttribute("viewBox", "0 0 24 24");
+      heart.setAttribute("fill", heartColors[Math.floor(Math.random() * heartColors.length)]);
+      heart.classList.add("floating-heart");
+
+      const size = Math.random() * 18 + 10; // 10px - 28px
+      const left = Math.random() * 100;
+      const duration = Math.random() * 6 + 6; // 6s - 12s
+      const delay = Math.random() * 5;
+      const sway = (Math.random() - 0.5) * 90 + "px";
+      const rot = (Math.random() - 0.5) * 60 + "deg";
+      const opacity = (Math.random() * 0.45 + 0.25).toFixed(2);
+
+      heart.style.width = `${size}px`;
+      heart.style.height = `${size}px`;
+      heart.style.left = `${left}%`;
+      heart.style.animationDuration = `${duration}s`;
+      heart.style.animationDelay = `${delay}s`;
+      heart.style.setProperty("--sway", sway);
+      heart.style.setProperty("--rot", rot);
+      heart.style.setProperty("--heart-opacity", opacity);
+
+      // Efek blur acak untuk kedalaman aesthetic
+      if (Math.random() > 0.65) {
+        heart.style.filter = "blur(1.5px)";
+      }
+
+      heart.innerHTML = `<path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>`;
+      heartsContainer.appendChild(heart);
+    }
+
+    // Buat 24 hiasan love aesthetic
+    for (let i = 0; i < 24; i++) {
+      createFloatingHeart();
+    }
+
+    // =========================================================
+    // 6. KONTROL MULAI & MUSIK
+    // =========================================================
+    const startOverlay = document.getElementById("startOverlay");
+    const startBtn = document.getElementById("startBtn");
+    const bgMusic = document.getElementById("bgMusic");
+    const playToggle = document.getElementById("playToggle");
+    const equalizer = document.getElementById("equalizer");
+    let isPlaying = false;
+
+    startBtn.addEventListener("click", () => {
+      startOverlay.classList.add("hidden");
+
+      bgMusic.play().then(() => {
+        isPlaying = true;
+        equalizer.classList.add("playing");
+        playToggle.textContent = "⏸";
+      }).catch(() => {
+        // Tetap jalan jika file lagu belum dimasukkan
+        isPlaying = false;
+        playToggle.textContent = "▶";
+      });
+
+      // Mulai memunculkan lirik satu per satu
+      showNextLyric();
+    });
+
+    playToggle.addEventListener("click", () => {
+      if (isPlaying) {
+        bgMusic.pause();
+        equalizer.classList.remove("playing");
+        playToggle.textContent = "▶";
+        isPlaying = false;
+      } else {
+        bgMusic.play();
+        equalizer.classList.add("playing");
+        playToggle.textContent = "⏸";
+        isPlaying = true;
+      }
+    });
+  </script>
+</body>
+</html>
